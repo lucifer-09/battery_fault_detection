@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detection Results</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container small-container">
+        <h1 class="bold">Detection Results</h1>
+        <h2>Anomalies</h2>
+        <ul class="anomaly-list">
+            {% for feature, indices in anomaly_indices.items() %}
+            <li>
+                <span class="feature-title">{{ feature }}:</span>
+                <span class="anomaly-count">{{ indices|length }} anomalies</span>
+                <a href="#" class="read-more">Read more</a>
+                <div class="anomaly-details" style="display:none;">
+                    {{ indices }}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="chart-container">
+            <canvas id="voltageChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="currentChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="temperatureChart"></canvas>
+        </div>
+        <a href="/" class="back-button">Go Back</a>
+    </div>
+    <script>
+        $(document).ready(function(){
+            $('.read-more').click(function(event) {
+                event.preventDefault();
+                $(this).next('.anomaly-details').slideToggle();
+                $(this).text($(this).text() == 'Read more' ? 'Read less' : 'Read more');
+            });
+
+            fetch('/get_chart_data')
+            .then(response => response.json())
+            .then(data => {
+                const voltageCtx = document.getElementById('voltageChart').getContext('2d');
+                const currentCtx = document.getElementById('currentChart').getContext('2d');
+                const temperatureCtx = document.getElementById('temperatureChart').getContext('2d');
+
+                new Chart(voltageCtx, {
+                    type: 'line',
+                    data: {
+                        labels: data.indices,
+                        datasets: [{
+                            label: 'Voltage',
+                            data: data.voltage,
+                            borderColor: 'blue',
+                            borderWidth: 1
+                        }, {
+                            label: 'Anomalies',
+                            data: data.anomalies_voltage.map(index => ({ x: index, y: data.voltage[index] })),
+                            borderColor: 'red',
+                            backgroundColor: 'red',
+                            type: 'scatter',
+                            showLine: false
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+
+                new Chart(currentCtx, {
+                    type: 'line',
+                    data: {
+                        labels: data.indices,
+                        datasets: [{
+                            label: 'Current',
+                            data: data.current,
+                            borderColor: 'green',
+                            borderWidth: 1
+                        }, {
+                            label: 'Anomalies',
+                            data: data.anomalies_current.map(index => ({ x: index, y: data.current[index] })),
+                            borderColor: 'red',
+                            backgroundColor: 'red',
+                            type: 'scatter',
+                            showLine: false
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+
+                new Chart(temperatureCtx, {
+                    type: 'line',
+                    data: {
+                        labels: data.indices,
+                        datasets: [{
+                            label: 'Temperature',
+                            data: data.temperature,
+                            borderColor: 'orange',
+                            borderWidth: 1
+                        }, {
+                            label: 'Anomalies',
+                            data: data.anomalies_temperature.map(index => ({ x: index, y: data.temperature[index] })),
+                            borderColor: 'red',
+                            backgroundColor: 'red',
+                            type: 'scatter',
+                            showLine: false
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                type: 'linear',
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Battery Fault Detection</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+
+    <div class="project-info">
+        <h2>KJ’s Educational Institute</h2>
+        <p><strong>K J College of Engineering and Management Research,</strong></p>
+        <p><strong>Department of Computer Engineering 2023-24</strong></p>
+        <p><strong>SAVITRIBAI PHULE PUNE UNIVERSITY</strong></p>
+        <h3>A PROJECT REPORT ON</h3>
+        <h2>“ANOMALY DETECTION SYSTEM FOR INTERNAL FAULTS IN ELECTRIC VEHICLES”</h2>
+        <p>Submitted to</p>
+        <p> <strong>SAVITRIBAI PHULE PUNE UNIVERSITY</strong></p>
+        <p>Submitted towards the partial fulfillment of the requirements of Bachelor of Engineering in Computer Engineering</p>
+        <p><strong>BY</strong></p>
+        <p>Vishal Chaudhari Seat No:B190724216</p>
+        <p>Azim Bagwan Seat No:B190724207</p>
+        <p>Sanjana Choudhary Seat No:B190724317</p>
+        <p>Rasika Gaikwad Seat No:B190724381</p>
+        <p><strong>UNDER THE GUIDANCE OF</strong></p>
+        <p>Prof. Ashwini Kamble</p>
+         <img src="{{ url_for('static', filename='KJ_Logo.jpg') }}" alt="KJ Logo" class="kj-logo">
+        <p><strong>DEPARTMENT OF COMPUTER ENGINEERING</strong></p>
+        <p>K J College of Engineering and Management Research</p>
+        <p>Near KhadiMachine Chowk, Khondwa Annexe, Pune - 411048</p>
+    </div>
+<div class="container">
+        <h1>Battery Fault Detection</h1>
+        <p>Welcome to the Battery Fault Detection System. Click the button below to detect anomalies in battery data.</p>
+        <form action="/detect" method="post">
+            <input type="submit" value="Detect Anomalies" class="detect-button">
+        </form>
+    </div>
+</body>
+</html>
